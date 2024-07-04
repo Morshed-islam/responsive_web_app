@@ -9,14 +9,15 @@ class ResponsiveLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Responsive Layout'),
+        backgroundColor: Colors.white,
+        title: const Text('মসজিদের হিসেব খাতা'),
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
           if (constraints.maxWidth > 1200) {
             return WebLayout();
           } else if (constraints.maxWidth > 800 && constraints.maxWidth <= 1200) {
-            return TabletLayout();
+            return const TabletLayout();
           } else {
             return MobileLayout();
           }

@@ -11,7 +11,7 @@
     For more details:
     * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
 
-    This is a placeholder for base href that will be replaced by the value of
+    This is a placeholder for base href that will be replaced by the value ofz
     the `--base-href` argument provided to `flutter build`.
   -->
   <base href="$FLUTTER_BASE_HREF">
@@ -29,8 +29,13 @@
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>responsive_web_app</title>
+  <title>Madrasha Hiseb Khata</title>
   <link rel="manifest" href="manifest.json">
+
+  <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-auth.js"></script>
+  <script src="firebase.js"></script>
 
   <script>
     // The value below is injected by flutter build, do not touch.
@@ -40,6 +45,7 @@
   <script src="flutter.js" defer></script>
 </head>
 <body>
+<!--<script src="main.dart.js"></script>-->
   <script>
     window.addEventListener('load', function(ev) {
       // Download main.dart.js
