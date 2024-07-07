@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Doner {
   String id;
   String donerType;
@@ -31,9 +33,9 @@ class Doner {
     };
   }
 
-  factory Doner.fromMap(Map<String, dynamic> map, String id) {
+  factory Doner.fromMap(Map<String, dynamic> map) {
     return Doner(
-      id: id,
+      id: 'id',
       donerType: map['doner_type'] ?? '',
       name: map['name'] ?? '',
       payableAmount: map['payable_amount'] ?? '',
@@ -43,4 +45,11 @@ class Doner {
       village: map['village'] ?? '',
     );
   }
+
+
+  factory Doner.fromFirestore(DocumentSnapshot doc) {
+    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+    return Doner.fromMap(data);
+  }
+
 }

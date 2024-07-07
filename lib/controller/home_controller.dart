@@ -18,7 +18,7 @@ class HomeController extends ChangeNotifier {
   ///get due amount------------------------
 
   void fetchTotalDueAmount() async {
-    String amount = await amountFetchingFromServer(collectionName: donorCollectionName,docName: "payable_amount");
+    String amount = await _amountFetchingFromServer(collectionName: donorCollectionName,docName: "payable_amount");
       totalPayableAmount = amount;
       notifyListeners();
   }
@@ -44,7 +44,7 @@ class HomeController extends ChangeNotifier {
 
   ///get total amount------------------------
   void fetchTotalAmount() async {
-    String amount = await amountFetchingFromServer(collectionName: donorCollectionName, docName: "total_donor_amount");
+    String amount = await _amountFetchingFromServer(collectionName: donorCollectionName, docName: "total_donor_amount");
     totalAmount = amount;
     notifyListeners();
   }
@@ -52,16 +52,15 @@ class HomeController extends ChangeNotifier {
 
   ///get total submitted------------------------
   void fetchTotalSubmittedAmount() async {
-    String amount = await amountFetchingFromServer(collectionName: donorCollectionName, docName: "total_submitted_amount");
+    String amount = await _amountFetchingFromServer(collectionName: donorCollectionName, docName: "total_submitted_amount");
     totalSubmittedAmount = amount;
     notifyListeners();
   }
 
 
 
-
   ///common method to fetch all types of amount from server
-  Future<String> amountFetchingFromServer({required String collectionName, required String docName})async{
+  Future<String> _amountFetchingFromServer({required String collectionName, required String docName})async{
     int amount = 0;
 
     // Get all documents from user_list_tb collection

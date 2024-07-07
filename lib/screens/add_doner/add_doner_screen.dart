@@ -11,11 +11,7 @@ class AddDonerScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Text('দাতার প্রোফাইল'),
-        leading: InkWell(onTap:(){
-          Navigator.popAndPushNamed(context, AppConstants.initialRoute);
-        },child: const Icon(Icons.arrow_back_ios_new_outlined)),
-      ),
+        title: const Text('দাতার প্রোফাইল'),),
       body:  ResponsiveWidget(
         mobile: const AddDonerProfile(),
         tablet: Container(

@@ -2,11 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_web_app/controller/add_doner_controller.dart';
-import 'package:responsive_web_app/controller/add_money_controller.dart';
+import 'package:responsive_web_app/controller/user_list_controller.dart';
 import 'package:responsive_web_app/controller/home_controller.dart';
 import 'package:responsive_web_app/responsive/responsive.dart';
 import 'package:responsive_web_app/screens/add_doner/add_doner_screen.dart';
-import 'package:responsive_web_app/screens/add_money/add_money_screen.dart';
+import 'package:responsive_web_app/screens/add_money/user_list_screen.dart';
 import 'package:responsive_web_app/utils/app_constant.dart';
 
 void main() async {
@@ -31,7 +31,7 @@ void main() async {
       // Provider<Something>(create: (_) => Something()),
       ChangeNotifierProvider(create: (_) => HomeController()),
       ChangeNotifierProvider(create: (_) => AddDonerController()),
-      ChangeNotifierProvider(create: (_) => AddMoneyController()),
+      ChangeNotifierProvider(create: (_) => UserListController()),
     ],
     child: const MyApp(),
   ));
@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
       routes: {
         AppConstants.initialRoute: (context) => ResponsiveLayout(),
         AppConstants.addUserScreenRoute: (context) => const AddDonerScreen(),
-        AppConstants.addMoneyRoute: (context) => const AddMoneyScreen(),
+        AppConstants.addMoneyRoute: (context) => const UserListScreen(),
       },
       // home: ResponsiveLayout(),
     );
