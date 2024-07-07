@@ -45,4 +45,21 @@ class UserListController extends ChangeNotifier {
     filteredContacts = results;
     notifyListeners();
   }
+
+
+  Future<void> collectAmount({required String documentId, required int submittedAmount,required int totalAmount}) async {
+
+    int uSubmittedAmount = totalAmount - submittedAmount;
+    int uPayableAmount = totalAmount - submittedAmount;
+    try {
+      await _firestore.collection(donorCollectionName).doc(documentId).update({
+        'payable_amount': uSubmittedAmount.toString(),
+        'total_submitted_amount' : uPayableAmount.toString(),
+      });
+      log("Due amount updated successfully");
+    } catch (e) {
+      log("Error updating due amount: $e");
+    }
+  }
+
 }

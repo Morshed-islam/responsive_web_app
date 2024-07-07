@@ -35,7 +35,7 @@ class Doner {
 
   factory Doner.fromMap(Map<String, dynamic> map) {
     return Doner(
-      id: 'id',
+      id: map['id'],
       donerType: map['doner_type'] ?? '',
       name: map['name'] ?? '',
       payableAmount: map['payable_amount'] ?? '',
