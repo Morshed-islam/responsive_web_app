@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:responsive_web_app/model/doner_model.dart';
 import 'package:responsive_web_app/model/expense_model.dart';
+import 'package:responsive_web_app/model/paid_amount_model.dart';
 
 class HomeController extends ChangeNotifier {
   String? totalPayableAmount = "";
@@ -16,30 +17,55 @@ class HomeController extends ChangeNotifier {
 
   List<ExpenseModel> expenseList = [];
   List<Doner> topDonorUsersList = [];
-
+  List<PaidAmountModel> paidAmountList = [];
 
   String donorCollectionName = "doner_user_collection";
   String expenseCollectionName = "expense_collection";
+  String paidCollectionName = "paid_amount_collection";
 
   bool get isLoading => _isLoading;
+
   ///==================Method====================
 
+
+
+  Future<List<PaidAmountModel>> fetchPaidAmountNestedCollection({String? userId}) async {
+    List<PaidAmountModel> documents = [];
+    try {
+      QuerySnapshot querySnapshot = await firestore
+          .collection(paidCollectionName)
+          .doc(userId) //document id /userId
+          .collection(userId!) //nested collection
+          .get();
+
+      for (var doc in querySnapshot.docs) {
+        documents.add(PaidAmountModel.fromFirestore(doc));
+      }
+    } catch (e) {
+      log('Error fetching nested collection: $e');
+    }
+    return documents;
+  }
+
+  ///get  amount and name
+  void getPaidAmountList() async {
+    paidAmountList = await fetchPaidAmountNestedCollection();
+
+    for (var item in paidAmountList) {
+      log('paid amount: ${item.name}');
+    }
+  }
 
   /// get top donor list
   Future<List<Doner>> getTopDonorUsers(int limit) async {
     List<Doner> topUsers = [];
 
     try {
-      QuerySnapshot querySnapshot = await firestore
-          .collection(donorCollectionName)
-          .orderBy('total_donor_amount', descending: true)
-          .limit(limit)
-          .get();
+      QuerySnapshot querySnapshot = await firestore.collection(donorCollectionName).orderBy('total_donor_amount', descending: true).limit(limit).get();
 
       for (var doc in querySnapshot.docs) {
         topUsers.add(Doner.fromFirestore(doc));
       }
-
     } catch (e) {
       log('Error fetching top users: $e');
     }
@@ -57,7 +83,6 @@ class HomeController extends ChangeNotifier {
     }
   }
 
-
   ///get list of expenses
   Future<List<ExpenseModel>> _fetchExpenses() async {
     await Future.delayed(const Duration(seconds: 2));
@@ -73,14 +98,14 @@ class HomeController extends ChangeNotifier {
     notifyListeners();
   }
 
-
   ///get due amount------------------------
 
   void fetchTotalDueAmount() async {
-    String amount = await _amountFetchingFromServer(collectionName: donorCollectionName,docName: "payable_amount");
-      totalPayableAmount = amount;
-      notifyListeners();
+    String amount = await _amountFetchingFromServer(collectionName: donorCollectionName, docName: "payable_amount");
+    totalPayableAmount = amount;
+    notifyListeners();
   }
+
   ///---------------------------------------
 
   ///get donor amount------------------------
@@ -99,6 +124,7 @@ class HomeController extends ChangeNotifier {
     donorCount = donor;
     notifyListeners();
   }
+
   ///---------------------------------------
 
   ///get total amount------------------------
@@ -108,7 +134,6 @@ class HomeController extends ChangeNotifier {
     notifyListeners();
   }
 
-
   ///get total submitted------------------------
   void fetchTotalSubmittedAmount() async {
     String amount = await _amountFetchingFromServer(collectionName: donorCollectionName, docName: "total_submitted_amount");
@@ -116,10 +141,8 @@ class HomeController extends ChangeNotifier {
     notifyListeners();
   }
 
-
-
   ///common method to fetch all types of amount from server
-  Future<String> _amountFetchingFromServer({required String collectionName, required String docName})async{
+  Future<String> _amountFetchingFromServer({required String collectionName, required String docName}) async {
     int amount = 0;
 
     // Get all documents from user_list_tb collection
@@ -135,9 +158,8 @@ class HomeController extends ChangeNotifier {
     return amount.toString();
   }
 
-  void updatePayableAmount(String amount)async{
+  void updatePayableAmount(String amount) async {
     totalPayableAmount = amount;
     notifyListeners();
   }
-
 }

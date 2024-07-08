@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_web_app/controller/home_controller.dart';
@@ -21,6 +23,7 @@ class _MobileLayoutState extends State<MobileLayout> {
     context.read<HomeController>().fetchTotalSubmittedAmount();
     context.read<HomeController>().getAllExpenses();
     context.read<HomeController>().fetchTopUsers();
+    context.read<HomeController>().getPaidAmountList();
 
     super.initState();
   }
@@ -29,6 +32,8 @@ class _MobileLayoutState extends State<MobileLayout> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+
+
 
     var controller = context.watch<HomeController>();
 
