@@ -4,7 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:responsive_web_app/model/doner_model.dart';
 import 'package:responsive_web_app/model/expense_model.dart';
-import 'package:responsive_web_app/model/paid_amount_model.dart';
+import 'package:responsive_web_app/model/collect_amount_model.dart';
+
+import '../utils/app_constant.dart';
 
 class HomeController extends ChangeNotifier {
   String? totalPayableAmount = "";
@@ -14,33 +16,59 @@ class HomeController extends ChangeNotifier {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   late QuerySnapshot querySnapshot;
   bool _isLoading = true;
+  bool _isCollectAmountLoading = true;
 
   List<ExpenseModel> expenseList = [];
   List<Doner> topDonorUsersList = [];
-  List<PaidAmountModel> paidAmountList = [];
+  List<CollectAmountModel> paidAmountList = [];
+  List<CollectAmountModel> collectAmountList = [];
 
-  String donorCollectionName = "doner_user_collection";
-  String expenseCollectionName = "expense_collection";
-  String paidCollectionName = "paid_amount_collection";
+
+
 
   bool get isLoading => _isLoading;
+  bool get isCollectAmountLoading => _isCollectAmountLoading;
 
   ///==================Method====================
 
+  updatedIsCollectAmountLoadingStatus(bool val){
+    _isCollectAmountLoading = val;
+    notifyListeners();
+  }
+
+  ///get list of individual collection amount
+  Future<List<CollectAmountModel>> _fetchIndividualCollectAmount() async {
+    await Future.delayed(const Duration(seconds: 2));
+    QuerySnapshot querySnapshot = await firestore.collection(AppConstants.individualCollectAmountRecordCollectionName).get();
+    var list = querySnapshot.docs.map((doc) => CollectAmountModel.fromFirestore(doc)).toList();
+    _isLoading = false;
+    notifyListeners();
+    return list;
+  }
+
+  void getIndividualCollectAmount() async {
+    collectAmountList = await _fetchIndividualCollectAmount();
+    notifyListeners();
+  }
 
 
-  Future<List<PaidAmountModel>> fetchPaidAmountNestedCollection({String? userId}) async {
-    List<PaidAmountModel> documents = [];
+
+  Future<List<CollectAmountModel>> fetchPaidAmountNestedCollection({required String userIdOfDonner}) async {
+    List<CollectAmountModel> documents = [];
     try {
+      await Future.delayed(const Duration(seconds: 2));
       QuerySnapshot querySnapshot = await firestore
-          .collection(paidCollectionName)
-          .doc(userId) //document id /userId
-          .collection(userId!) //nested collection
+          .collection(AppConstants.paidCollectionName)
+          .doc(userIdOfDonner) //document id /userId
+          .collection(userIdOfDonner) //nested collection
           .get();
 
+
       for (var doc in querySnapshot.docs) {
-        documents.add(PaidAmountModel.fromFirestore(doc));
+        documents.add(CollectAmountModel.fromFirestore(doc));
       }
+      _isCollectAmountLoading = false;
+      notifyListeners();
     } catch (e) {
       log('Error fetching nested collection: $e');
     }
@@ -48,12 +76,13 @@ class HomeController extends ChangeNotifier {
   }
 
   ///get  amount and name
-  void getPaidAmountList() async {
-    paidAmountList = await fetchPaidAmountNestedCollection();
-
+  Future<void> getSinglePaidAmountData({required String userIdOfDonner}) async {
+    paidAmountList = await fetchPaidAmountNestedCollection(userIdOfDonner:userIdOfDonner);
     for (var item in paidAmountList) {
       log('paid amount: ${item.name}');
     }
+    notifyListeners();
+
   }
 
   /// get top donor list
@@ -61,7 +90,7 @@ class HomeController extends ChangeNotifier {
     List<Doner> topUsers = [];
 
     try {
-      QuerySnapshot querySnapshot = await firestore.collection(donorCollectionName).orderBy('total_donor_amount', descending: true).limit(limit).get();
+      QuerySnapshot querySnapshot = await firestore.collection(AppConstants.donorCollectionName).orderBy('total_donor_amount', descending: true).limit(limit).get();
 
       for (var doc in querySnapshot.docs) {
         topUsers.add(Doner.fromFirestore(doc));
@@ -86,7 +115,7 @@ class HomeController extends ChangeNotifier {
   ///get list of expenses
   Future<List<ExpenseModel>> _fetchExpenses() async {
     await Future.delayed(const Duration(seconds: 2));
-    QuerySnapshot querySnapshot = await firestore.collection(expenseCollectionName).get();
+    QuerySnapshot querySnapshot = await firestore.collection(AppConstants.expenseCollectionName).get();
     var list = querySnapshot.docs.map((doc) => ExpenseModel.fromFirestore(doc)).toList();
     _isLoading = false;
     notifyListeners();
@@ -101,7 +130,7 @@ class HomeController extends ChangeNotifier {
   ///get due amount------------------------
 
   void fetchTotalDueAmount() async {
-    String amount = await _amountFetchingFromServer(collectionName: donorCollectionName, docName: "payable_amount");
+    String amount = await _amountFetchingFromServer(collectionName: AppConstants.donorCollectionName, docName: "payable_amount");
     totalPayableAmount = amount;
     notifyListeners();
   }
@@ -129,14 +158,14 @@ class HomeController extends ChangeNotifier {
 
   ///get total amount------------------------
   void fetchTotalAmount() async {
-    String amount = await _amountFetchingFromServer(collectionName: donorCollectionName, docName: "total_donor_amount");
+    String amount = await _amountFetchingFromServer(collectionName: AppConstants.donorCollectionName, docName: "total_donor_amount");
     totalAmount = amount;
     notifyListeners();
   }
 
   ///get total submitted------------------------
   void fetchTotalSubmittedAmount() async {
-    String amount = await _amountFetchingFromServer(collectionName: donorCollectionName, docName: "total_submitted_amount");
+    String amount = await _amountFetchingFromServer(collectionName: AppConstants.donorCollectionName, docName: "total_submitted_amount");
     totalSubmittedAmount = amount;
     notifyListeners();
   }

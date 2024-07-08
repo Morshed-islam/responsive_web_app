@@ -23,7 +23,7 @@ class _MobileLayoutState extends State<MobileLayout> {
     context.read<HomeController>().fetchTotalSubmittedAmount();
     context.read<HomeController>().getAllExpenses();
     context.read<HomeController>().fetchTopUsers();
-    context.read<HomeController>().getPaidAmountList();
+    context.read<HomeController>().getIndividualCollectAmount();
 
     super.initState();
   }

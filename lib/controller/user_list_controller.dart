@@ -4,10 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../model/doner_model.dart';
+import '../utils/app_constant.dart';
 
 class UserListController extends ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  String donorCollectionName = "doner_user_collection";
   bool _isLoading = true;
   List<Doner> userList = [];
   List<Doner> filteredContacts = [];
@@ -19,7 +19,7 @@ class UserListController extends ChangeNotifier {
   ///get list of users
   Future<List<Doner>> _fetchUsers() async {
     await Future.delayed(const Duration(seconds: 2));
-    QuerySnapshot querySnapshot = await _firestore.collection(donorCollectionName).get();
+    QuerySnapshot querySnapshot = await _firestore.collection(AppConstants.donorCollectionName).get();
     var list = querySnapshot.docs.map((doc) => Doner.fromFirestore(doc)).toList();
     _isLoading = false;
     notifyListeners();
@@ -53,7 +53,7 @@ class UserListController extends ChangeNotifier {
     int uPayableAmount = totalAmount - submittedAmount;
 
     try {
-      await _firestore.collection(donorCollectionName).doc(documentId).update({
+      await _firestore.collection(AppConstants.donorCollectionName).doc(documentId).update({
         'payable_amount': uSubmittedAmount.toString(),
         'total_submitted_amount' : uPayableAmount.toString(),
       });

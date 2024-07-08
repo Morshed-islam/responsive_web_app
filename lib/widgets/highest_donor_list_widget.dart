@@ -56,7 +56,7 @@ class HighestDonorListWidget extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        "তারিখ",
+                        "গ্রাম",
                         style: GoogleFonts.lato(
                           textStyle: const TextStyle(
                             color: Colors.black,
