@@ -51,6 +51,7 @@ class UserListController extends ChangeNotifier {
 
     int uSubmittedAmount = totalAmount - submittedAmount;
     int uPayableAmount = totalAmount - submittedAmount;
+
     try {
       await _firestore.collection(donorCollectionName).doc(documentId).update({
         'payable_amount': uSubmittedAmount.toString(),

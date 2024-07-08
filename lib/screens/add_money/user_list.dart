@@ -144,8 +144,9 @@ class _UserListState extends State<UserList> {
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Flexible(
-                                  flex: 1,
+
+                                SizedBox(
+                                  width: (MediaQuery.of(context).size.width-150)/2,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -155,11 +156,11 @@ class _UserListState extends State<UserList> {
                                         children: [
                                           Text(
                                             "নাম: ",
-                                            style: GoogleFonts.lato(textStyle: const TextStyle(color: Colors.black, letterSpacing: .5, fontSize: 18, fontWeight: FontWeight.w500)),
+                                            style: GoogleFonts.lato(textStyle: const TextStyle(color: Colors.black, letterSpacing: .5, fontSize: 14, fontWeight: FontWeight.w500,overflow: TextOverflow.ellipsis)),
                                           ),
                                           Text(
                                             user.name,
-                                            style: GoogleFonts.lato(textStyle: const TextStyle(color: Colors.black, letterSpacing: .5, fontSize: 18, fontWeight: FontWeight.w500)),
+                                            style: GoogleFonts.lato(textStyle: const TextStyle(color: Colors.black, letterSpacing: .5, fontSize: 14, fontWeight: FontWeight.w500)),
                                           ),
                                         ],
                                       ),
@@ -192,8 +193,8 @@ class _UserListState extends State<UserList> {
                                     ],
                                   ),
                                 ),
-                                Flexible(
-                                  flex: 1,
+
+                                Expanded(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -203,13 +204,13 @@ class _UserListState extends State<UserList> {
                                         children: [
                                           Text(
                                             "মোট টাকা: ",
-                                            style: GoogleFonts.lato(textStyle: const TextStyle(color: Colors.black, letterSpacing: .5, fontSize: 14, fontWeight: FontWeight.w400)),
+                                            style: GoogleFonts.lato(textStyle: const TextStyle(color: Colors.black, letterSpacing: .5, fontSize: 14, fontWeight: FontWeight.w400,)),
                                           ),
                                           Text(
                                             "${AppUtils.convertEngToBanglaNumber(user.totalDonorAmount)} টাকা",
                                             style: GoogleFonts.lato(textStyle: const TextStyle(color: Colors.black, letterSpacing: .5, fontSize: 14, fontWeight: FontWeight.w400)),
                                           ),
-
+                                  
                                           const Spacer(),
                                           // IconButton(onPressed: ()=> showAddMoneyDialog(context,user), icon: const Icon(Icons.add_circle_outline_rounded),iconSize: 15,padding: EdgeInsets.zero,),
                                           InkWell(onTap: () => showAddMoneyDialog(context, user), child: const Icon(Icons.add_circle_outline_rounded)),
@@ -239,7 +240,7 @@ class _UserListState extends State<UserList> {
                                             "${AppUtils.convertEngToBanglaNumber(user.payableAmount)} টাকা",
                                             style: GoogleFonts.lato(textStyle: const TextStyle(color: Colors.red, letterSpacing: .5, fontSize: 14, fontWeight: FontWeight.w600)),
                                           ),
-                                          const Spacer(),
+                                          Spacer(),
                                           InkWell(onTap: () => showAddMoneyDialog(context, user), child: const Icon(Icons.edit_note_sharp)),
                                         ],
                                       ),

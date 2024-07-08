@@ -44,11 +44,11 @@ class HomeCard extends StatelessWidget {
              SvgPicture.asset(icon ?? "",width: 90,height: 90,),
               const SizedBox(height: 10,),
               Text("$title ",style: GoogleFonts.lato(
-                textStyle: TextStyle(color: Colors.black, letterSpacing: .5,fontSize: 18),
+                textStyle: const TextStyle(color: Colors.black, letterSpacing: .5,fontSize: 18),
               ),),
-              isActionButton == false ? Text("${value ?? '00'}",style: GoogleFonts.poppins(
-                textStyle: TextStyle(color: Colors.black, letterSpacing: .5,fontSize: 16),
-              ),): SizedBox.shrink(),
+              isActionButton == false ? Text(value ?? '00',style: GoogleFonts.poppins(
+                textStyle: const TextStyle(color: Colors.black, letterSpacing: .5,fontSize: 16),
+              ),): const SizedBox.shrink(),
             ],
           ),
         ),

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:responsive_web_app/model/doner_model.dart';
+import 'package:responsive_web_app/model/expense_model.dart';
 
 class HomeController extends ChangeNotifier {
   String? totalPayableAmount = "";
@@ -11,9 +12,67 @@ class HomeController extends ChangeNotifier {
   int? donorCount = 0;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   late QuerySnapshot querySnapshot;
-  String donorCollectionName = "doner_user_collection";
+  bool _isLoading = true;
 
+  List<ExpenseModel> expenseList = [];
+  List<Doner> topDonorUsersList = [];
+
+
+  String donorCollectionName = "doner_user_collection";
+  String expenseCollectionName = "expense_collection";
+
+  bool get isLoading => _isLoading;
   ///==================Method====================
+
+
+  /// get top donor list
+  Future<List<Doner>> getTopDonorUsers(int limit) async {
+    List<Doner> topUsers = [];
+
+    try {
+      QuerySnapshot querySnapshot = await firestore
+          .collection(donorCollectionName)
+          .orderBy('total_donor_amount', descending: true)
+          .limit(limit)
+          .get();
+
+      for (var doc in querySnapshot.docs) {
+        topUsers.add(Doner.fromFirestore(doc));
+      }
+
+    } catch (e) {
+      log('Error fetching top users: $e');
+    }
+
+    return topUsers;
+  }
+
+  void fetchTopUsers() async {
+    int limit = 5; // Number of top users you want to fetch
+    List<Doner> _topDonorUsers = await getTopDonorUsers(limit);
+
+    for (var user in _topDonorUsers) {
+      topDonorUsersList.add(user);
+      log('User ID: ${user.totalDonorAmount}');
+    }
+  }
+
+
+  ///get list of expenses
+  Future<List<ExpenseModel>> _fetchExpenses() async {
+    await Future.delayed(const Duration(seconds: 2));
+    QuerySnapshot querySnapshot = await firestore.collection(expenseCollectionName).get();
+    var list = querySnapshot.docs.map((doc) => ExpenseModel.fromFirestore(doc)).toList();
+    _isLoading = false;
+    notifyListeners();
+    return list;
+  }
+
+  void getAllExpenses() async {
+    expenseList = await _fetchExpenses();
+    notifyListeners();
+  }
+
 
   ///get due amount------------------------
 
