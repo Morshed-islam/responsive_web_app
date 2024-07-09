@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_web_app/model/collect_amount_model.dart';
+import '../../controller/collect_money_controller.dart';
 import '../../controller/home_controller.dart';
 import '../../utils/app_constant.dart';
 import '../../utils/app_images.dart';
@@ -47,6 +48,11 @@ class _HomeScreenState extends State<HomeScreen> {
             Flexible(
                 flex: 1,
                 child: HomeCard(
+                  onPressed: (){
+
+                   var collectModel = CollectAmountModel(id: '', name: 'TestMorshed', amount: '33333', createdAt: '12/12/23', addedBy: 'test morshed',);
+                    context.read<CollectMoneyController>().allCollectedAmountNestedCollectionRecord(collectModel, 'meYK1sRi3pBV7VPmYAqV');
+                  },
                   icon: AppImages.users(),
                   // icon: 'assets/lotties/user_list.json',
                   title: "মোট দাতা",
