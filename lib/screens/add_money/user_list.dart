@@ -29,71 +29,9 @@ class _UserListState extends State<UserList> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     var controller = context.watch<UserListController>();
-    filteredContacts = controller.userList;
+    filteredContacts = controller.donorList;
   }
 
-  void showAddMoneyDialog(BuildContext context, Doner user) {
-    final _formKey = GlobalKey<FormState>();
-    final _textFieldController = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('টাকা জমা নিন'),
-          content: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text('নাম: ${user.name}'),
-                Text('গ্রাম: ${user.village}'),
-                Text('মোবাইল নং: ${user.phone}'),
-                const Text(
-                  'বকেয়ার পরিমাণ: ২০,০০০',
-                  style: TextStyle(color: Colors.red),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                TextFormField(
-                  controller: _textFieldController,
-                  decoration: const InputDecoration(
-                    labelText: 'জমার পরিমাণ',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                    return null;
-                  },
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              child: const Text('কেটে দিন'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('জমা দিন'),
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  // Perform submit action
-                  Navigator.of(context).pop();
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,10 +60,10 @@ class _UserListState extends State<UserList> {
                 builder: (context, controller, child) {
                   if (controller.isLoading) {
                     return const Center(child: CircularProgressIndicator());
-                  } else if (controller.userList.isEmpty) {
+                  } else if (controller.donorList.isEmpty) {
                     return const Center(child: Text('No users found.'));
                   } else {
-                    filteredContacts = controller.userList;
+                    filteredContacts = controller.donorList;
                     return ListView.builder(
                       itemCount: filteredContacts.length,
                       itemBuilder: (context, index) {
@@ -213,7 +151,10 @@ class _UserListState extends State<UserList> {
                                   
                                           const Spacer(),
                                           // IconButton(onPressed: ()=> showAddMoneyDialog(context,user), icon: const Icon(Icons.add_circle_outline_rounded),iconSize: 15,padding: EdgeInsets.zero,),
-                                          InkWell(onTap: () => showAddMoneyDialog(context, user), child: const Icon(Icons.add_circle_outline_rounded)),
+                                          InkWell(onTap: () {
+                                           AppUtils.showAddMoneyDialog(context, user,controller);
+
+                                          }, child: const Icon(Icons.add_circle_outline_rounded)),
                                         ],
                                       ),
                                       Row(
@@ -241,7 +182,7 @@ class _UserListState extends State<UserList> {
                                             style: GoogleFonts.lato(textStyle: const TextStyle(color: Colors.red, letterSpacing: .5, fontSize: 14, fontWeight: FontWeight.w600)),
                                           ),
                                           Spacer(),
-                                          InkWell(onTap: () => showAddMoneyDialog(context, user), child: const Icon(Icons.edit_note_sharp)),
+                                          InkWell(onTap: () => AppUtils.showAddMoneyDialog(context, user,controller), child: const Icon(Icons.edit_note_sharp)),
                                         ],
                                       ),
                                     ],

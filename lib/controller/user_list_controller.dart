@@ -9,12 +9,30 @@ import '../utils/app_constant.dart';
 class UserListController extends ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   bool _isLoading = true;
-  List<Doner> userList = [];
+  List<Doner> donorList = [];
   List<Doner> filteredContacts = [];
 
   bool get isLoading => _isLoading;
 
   ///------------------------------------------------------
+
+
+  void updateDonorListData({required String paidAmount,required String id}){
+    var mDonor = donorList.where((element) => element.id == id).toList();
+
+    if(mDonor.isNotEmpty){
+
+      mDonor.first.payableAmount = paidAmount;
+
+      log("User id ${mDonor.first.id}");
+      log("User payable ${mDonor.first.payableAmount}");
+      notifyListeners();
+    }else{
+      log("User not found");
+    }
+
+  }
+
 
   ///get list of users
   Future<List<Doner>> _fetchUsers() async {
@@ -27,12 +45,12 @@ class UserListController extends ChangeNotifier {
   }
 
   void getUsers() async {
-    userList = await _fetchUsers();
+    donorList = await _fetchUsers();
     notifyListeners();
   }
 
   void filterContacts(String query) {
-    final results = userList.where((user) {
+    final results = donorList.where((user) {
       final nameLower = user.name.toLowerCase();
       final villageLower = user.village.toLowerCase();
       final searchLower = query.toLowerCase();
