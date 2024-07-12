@@ -13,19 +13,19 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   ///for mobile app
-  if (Firebase.apps.isEmpty) {
-    await Firebase.initializeApp();
-  } else {
-    Firebase.app(); // Use the already initialized app
-  }
+  // if (Firebase.apps.isEmpty) {
+  //   await Firebase.initializeApp();
+  // } else {
+  //   Firebase.app(); // Use the already initialized app
+  // }
 
   ///for web only
-  // await Firebase.initializeApp(options: const FirebaseOptions(
-  //     apiKey: "AIzaSyBv2oGTOcc6H3ccv4JEyn3Q_YQtxW7Fg74",
-  //     projectId: "personal-project-cd273",
-  //     messagingSenderId: "775719963929",
-  //     appId: "1:775719963929:web:745e8191199b45ae43c988",
-  // ));
+  await Firebase.initializeApp(options: const FirebaseOptions(
+      apiKey: "AIzaSyBv2oGTOcc6H3ccv4JEyn3Q_YQtxW7Fg74",
+      projectId: "personal-project-cd273",
+      messagingSenderId: "775719963929",
+      appId: "1:775719963929:web:745e8191199b45ae43c988",
+  ));
 
   runApp(MultiProvider(
     providers: [
