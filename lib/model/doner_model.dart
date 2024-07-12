@@ -46,10 +46,29 @@ class Doner {
     );
   }
 
-
   factory Doner.fromFirestore(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     return Doner.fromMap(data);
   }
 
+
+  Doner copyWith({
+    String? id,
+    String? donerType,
+    String? name,
+    String? payableAmount,
+    String? phone,
+    String? totalDonorAmount,
+    String? totalSubmittedAmount,
+    String? village,
+  }) {
+    return Doner(
+      donerType: id ?? this.id,
+      name: name ?? this.name,
+      payableAmount: payableAmount ?? this.payableAmount,
+      totalDonorAmount: totalDonorAmount ?? this.totalDonorAmount,
+      totalSubmittedAmount: totalSubmittedAmount ?? this.totalSubmittedAmount,
+      village: village ?? this.village,
+    );
+  }
 }

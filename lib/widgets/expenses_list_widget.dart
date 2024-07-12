@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:responsive_web_app/model/expense_model.dart';
 
 import '../controller/home_controller.dart';
 import '../utils/app_utils.dart';
@@ -66,7 +68,9 @@ class ExpensesListWidget extends StatelessWidget {
                         ),
                       ),
                       InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          controller.addExpense(ExpenseModel(title: "test", desc: "test data ", amount: '1000', date: "05/12/34", addedBy: "Morhsed"));
+                        },
                         child: const Padding(
                           padding: EdgeInsets.only(left: 8, right: 8.0),
                           child: Icon(

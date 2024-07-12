@@ -12,6 +12,7 @@ class HomeController extends ChangeNotifier {
   String? totalPayableAmount = "";
   String? totalAmount = "";
   String? totalSubmittedAmount = "";
+  String errorMessage = "";
   int? donorCount = 0;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   late QuerySnapshot querySnapshot;
@@ -30,6 +31,24 @@ class HomeController extends ChangeNotifier {
   bool get isCollectAmountLoading => _isCollectAmountLoading;
 
   ///==================Method====================
+
+
+  Future<String> addExpense(ExpenseModel expense) async {
+    try {
+      await firestore.collection(AppConstants.expenseCollectionName).add(expense.toMap());
+      notifyListeners();
+      getAllExpenses();
+      return errorMessage = "Success";
+    } catch (error) {
+      log("Error adding donor: $error");
+      errorMessage = error.toString();
+
+      return errorMessage;
+
+    }
+  }
+
+
 
   updatedIsCollectAmountLoadingStatus(bool val){
     _isCollectAmountLoading = val;

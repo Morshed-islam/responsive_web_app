@@ -9,6 +9,8 @@ import 'package:responsive_web_app/screens/add_doner/add_doner_screen.dart';
 import 'package:responsive_web_app/screens/add_money/user_list_screen.dart';
 import 'package:responsive_web_app/utils/app_constant.dart';
 
+import 'controller/collect_money_controller.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -33,6 +35,7 @@ void main() async {
       ChangeNotifierProvider(create: (_) => HomeController()),
       ChangeNotifierProvider(create: (_) => AddDonerController()),
       ChangeNotifierProvider(create: (_) => UserListController()),
+      ChangeNotifierProvider(create: (_) => CollectMoneyController()),
     ],
     child: const MyApp(),
   ));
