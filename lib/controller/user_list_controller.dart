@@ -17,27 +17,28 @@ class UserListController extends ChangeNotifier {
   ///------------------------------------------------------
 
 
-  void updateDonorListData({required String paidAmount,required String id}){
-    var mDonor = donorList.where((element) => element.id == id).toList();
+  ///update provider data
+  void updateDonorListPayableAmount({required String paidAmount, required String donorId}) {
+    // Find the index of the user in the list
+    int index = donorList.indexWhere((element) => element.id == donorId);
 
-    if(mDonor.isNotEmpty){
+    if (index != -1) {
+      // Update the user using copyWith and replace it in the list
+      donorList[index] = donorList[index].copyWith(payableAmount: paidAmount);
 
-      mDonor.first.payableAmount = paidAmount;
-
-      log("User id ${mDonor.first.id}");
-      log("User payable ${mDonor.first.payableAmount}");
+      log("User id ${donorList[index].id}");
+      log("User payable ${donorList[index].payableAmount}");
       notifyListeners();
-    }else{
+    } else {
       log("User not found");
     }
-
   }
 
 
   ///get list of users
   Future<List<Doner>> _fetchUsers() async {
     await Future.delayed(const Duration(seconds: 2));
-    QuerySnapshot querySnapshot = await _firestore.collection(AppConstants.donorCollectionName).get();
+    QuerySnapshot querySnapshot = await _firestore.collection(AppConstants.donorListCollection).get();
     var list = querySnapshot.docs.map((doc) => Doner.fromFirestore(doc)).toList();
     _isLoading = false;
     notifyListeners();
@@ -45,8 +46,17 @@ class UserListController extends ChangeNotifier {
   }
 
   void getUsers() async {
-    donorList = await _fetchUsers();
-    notifyListeners();
+    if(donorList.isEmpty){
+      donorList = await _fetchUsers();
+      log("empty user list");
+      notifyListeners();
+    }{
+      log("Not empty user list");
+
+      donorList = donorList;
+    }
+
+    // notifyListeners();
   }
 
   void filterContacts(String query) {
@@ -65,20 +75,5 @@ class UserListController extends ChangeNotifier {
   }
 
 
-  Future<void> collectAmount({required String documentId, required int submittedAmount,required int totalAmount}) async {
-
-    int uSubmittedAmount = totalAmount - submittedAmount;
-    int uPayableAmount = totalAmount - submittedAmount;
-
-    try {
-      await _firestore.collection(AppConstants.donorCollectionName).doc(documentId).update({
-        'payable_amount': uSubmittedAmount.toString(),
-        'total_submitted_amount' : uPayableAmount.toString(),
-      });
-      log("Due amount updated successfully");
-    } catch (e) {
-      log("Error updating due amount: $e");
-    }
-  }
 
 }

@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_web_app/controller/collect_money_controller.dart';
 import 'package:responsive_web_app/controller/user_list_controller.dart';
 import 'package:responsive_web_app/model/doner_model.dart';
 import 'package:responsive_web_app/utils/app_utils.dart';
@@ -23,6 +26,7 @@ class _UserListState extends State<UserList> {
   void initState() {
     super.initState();
     context.read<UserListController>().getUsers();
+    log("init user list");
   }
 
   @override
@@ -36,6 +40,7 @@ class _UserListState extends State<UserList> {
   @override
   Widget build(BuildContext context) {
     var userController = context.watch<UserListController>();
+    var collectMoneyController = context.watch<CollectMoneyController>();
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
@@ -152,7 +157,7 @@ class _UserListState extends State<UserList> {
                                           const Spacer(),
                                           // IconButton(onPressed: ()=> showAddMoneyDialog(context,user), icon: const Icon(Icons.add_circle_outline_rounded),iconSize: 15,padding: EdgeInsets.zero,),
                                           InkWell(onTap: () {
-                                           AppUtils.showAddMoneyDialog(context, user,controller);
+                                           AppUtils.showAddMoneyDialog(context, user,controller,collectMoneyController);
 
                                           }, child: const Icon(Icons.add_circle_outline_rounded)),
                                         ],
@@ -182,7 +187,7 @@ class _UserListState extends State<UserList> {
                                             style: GoogleFonts.lato(textStyle: const TextStyle(color: Colors.red, letterSpacing: .5, fontSize: 14, fontWeight: FontWeight.w600)),
                                           ),
                                           Spacer(),
-                                          InkWell(onTap: () => AppUtils.showAddMoneyDialog(context, user,controller), child: const Icon(Icons.edit_note_sharp)),
+                                          // InkWell(onTap: () => AppUtils.showAddMoneyDialog(context, user,controller,collectMoneyController), child: const Icon(Icons.edit_note_sharp)),
                                         ],
                                       ),
                                     ],

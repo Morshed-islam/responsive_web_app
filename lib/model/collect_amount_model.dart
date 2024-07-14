@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class CollectAmountModel {
   String id;
   String name;
-  String amount;
+  String collectAmount;
   String createdAt;
   String addedBy;
 
@@ -11,7 +11,7 @@ class CollectAmountModel {
   CollectAmountModel({
     required this.id,
     required this.name,
-    required this.amount,
+    required this.collectAmount,
     required this.createdAt,
     required this.addedBy,
   });
@@ -20,10 +20,16 @@ class CollectAmountModel {
     return {
       'id': id,
       'name': name,
-      'collect_amount': amount,
+      'collect_amount': collectAmount,
       'created_at': createdAt,
       'addedby': addedBy,
+    };
+  }
 
+  Map<String, dynamic> toMapUpdateOnlyAmountNDate() {
+    return {
+      'collect_amount': collectAmount,
+      'created_at': createdAt,
     };
   }
 
@@ -31,7 +37,7 @@ class CollectAmountModel {
     return CollectAmountModel(
       id: map['id'] ?? '',
       name: map['name'] ?? '',
-      amount: map['collect_amount'] ?? '',
+      collectAmount: map['collect_amount'] ?? '',
       createdAt: map['created_at'] ?? '',
       addedBy: map['addedby'] ?? '',
     );

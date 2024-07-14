@@ -1,4 +1,4 @@
-package com.example.responsive_web_app
+package com.masjidhiseb.khata
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -109,7 +109,7 @@ class HomeController extends ChangeNotifier {
     List<Doner> topUsers = [];
 
     try {
-      QuerySnapshot querySnapshot = await firestore.collection(AppConstants.donorCollectionName).orderBy('total_donor_amount', descending: true).limit(limit).get();
+      QuerySnapshot querySnapshot = await firestore.collection(AppConstants.donorListCollection).orderBy('total_donor_amount', descending: true).limit(limit).get();
 
       for (var doc in querySnapshot.docs) {
         topUsers.add(Doner.fromFirestore(doc));
@@ -149,7 +149,7 @@ class HomeController extends ChangeNotifier {
   ///get due amount------------------------
 
   void fetchTotalDueAmount() async {
-    String amount = await _amountFetchingFromServer(collectionName: AppConstants.donorCollectionName, docName: "payable_amount");
+    String amount = await _amountFetchingFromServer(collectionName: AppConstants.donorListCollection, docName: "payable_amount");
     totalPayableAmount = amount;
     notifyListeners();
   }
@@ -177,14 +177,14 @@ class HomeController extends ChangeNotifier {
 
   ///get total amount------------------------
   void fetchTotalAmount() async {
-    String amount = await _amountFetchingFromServer(collectionName: AppConstants.donorCollectionName, docName: "total_donor_amount");
+    String amount = await _amountFetchingFromServer(collectionName: AppConstants.donorListCollection, docName: "total_donor_amount");
     totalAmount = amount;
     notifyListeners();
   }
 
   ///get total submitted------------------------
   void fetchTotalSubmittedAmount() async {
-    String amount = await _amountFetchingFromServer(collectionName: AppConstants.donorCollectionName, docName: "total_submitted_amount");
+    String amount = await _amountFetchingFromServer(collectionName: AppConstants.donorListCollection, docName: "total_submitted_amount");
     totalSubmittedAmount = amount;
     notifyListeners();
   }

@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.responsive_web_app">
+    package="com.masjidhiseb.khata">
    <application
         android:label="responsive_web_app"
         android:name="${applicationName}"

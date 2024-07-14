@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: HomeCard(
                   onPressed: (){
 
-                   var collectModel = CollectAmountModel(id: '', name: 'TestMorshed', amount: '33333', createdAt: '12/12/23', addedBy: 'test morshed',);
+                   var collectModel = CollectAmountModel(id: '', name: 'TestMorshed', collectAmount: '33333', createdAt: '12/12/23', addedBy: 'test morshed',);
                     context.read<CollectMoneyController>().allCollectedAmountNestedCollectionRecord(collectModel, 'meYK1sRi3pBV7VPmYAqV');
                   },
                   icon: AppImages.users(),
@@ -253,7 +253,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         Text(
-                          item.amount,
+                          item.collectAmount,
                           style: GoogleFonts.lato(
                             textStyle: const TextStyle(color: Colors.black, letterSpacing: .5, fontSize: 14, fontWeight: FontWeight.w400),
                           ),
@@ -304,7 +304,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Flexible(
                                     flex: 1, // Adjust the flex values as needed
                                     child: Text(
-                                      AppUtils.convertEngToBanglaNumber(nestedDocumentItem.amount),
+                                      AppUtils.convertEngToBanglaNumber(nestedDocumentItem.collectAmount),
                                       style: GoogleFonts.lato(
                                         textStyle: TextStyle(
                                           color: index == 0 ? Colors.green : Colors.black,

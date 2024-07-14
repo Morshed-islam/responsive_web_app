@@ -24,11 +24,11 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0.1'
 }
 
-//def keystoreProperties = new Properties()
-//def keystorePropertiesFile = rootProject.file('key.properties')
-//if (keystorePropertiesFile.exists()) {
-//    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-//}
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
 
 android {
     compileSdkVersion 34
@@ -51,14 +51,14 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.example.responsive_web_app"
+        applicationId "com.masjidhiseb.khata"
         minSdkVersion 21
-        targetSdkVersion 33
+        targetSdkVersion 34
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
-        versionCode 73
-        versionName "2.3.2"
+        versionCode 75
+        versionName "2.3.3"
     }
 
 //    signingConfigs {
@@ -79,82 +79,56 @@ android {
 //        }
 //    }
 
-    buildTypes {
+
+    signingConfigs {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            crunchPngs false
-            signingConfig signingConfigs.debug
-            minifyEnabled false
-            shrinkResources false
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+            storePassword keystoreProperties['storePassword']
         }
     }
 
-//    buildTypes {
-//        release {
-//            // TODO: Add your own signing config for the release build.
-//            // Signing with the debug keys for now, so `flutter run --release` works.
-//            crunchPngs false
-//            signingConfig signingConfigs.release
-////            signingConfig signingConfigs.debug
-//            minifyEnabled false
-//            shrinkResources false
-////            multiDexEnabled true
-//
-////            ndk {
-////                if (!project.hasProperty('target-platform')) {
-////                    abiFilters 'armeabi', 'arm64-v8a', 'armeabi-v7a', 'x86_64', 'x86'
-////                } else {
-////                    def platforms = project.property('target-platform').split(',')
-////                    def platformMap = [
-////                            'android-arm'  : 'armeabi-v7a',
-////                            'android-arm64': 'arm64-v8a',
-////                            'android-x86'  : 'x86',
-////                            'android-x64'  : 'x86_64',
-////                            'armeabi'      : 'armeabi'
-////                    ]
-////                    // Exclude Android NDK versions 9 and 11
-////                    def excludedVersions = ['android-9', 'android-11']
-////
-////                    abiFilters = platforms.stream().map({ e ->
-////                        if (!excludedVersions.contains(e)) {
-////                            platformMap.containsKey(e) ? platformMap[e] : e
-////                        } else {
-////                            null // Exclude the version
-////                        }
-////                    }).filter({ it != null }).toArray()
-////                }
-////            }
-//        }
-//    }
-}
-
-flutter {
-    source '../..'
-}
-
-dependencies {
-    def work_version = "2.8.1"
-    constraints {
-        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0") {
-            because("kotlin-stdlib-jdk7 is now a part of kotlin-stdlib")
+        buildTypes {
+            release {
+                // TODO: Add your own signing config for the release build.
+                // Signing with the debug keys for now, so `flutter run --release` works.
+                crunchPngs false
+                signingConfig signingConfigs.release
+                minifyEnabled false
+                shrinkResources false
+            }
         }
-        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0") {
-            because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
-        }
+
+
     }
-    implementation platform('com.google.firebase:firebase-bom:32.2.3')
-    implementation "androidx.browser:browser:1.4.0"
-    implementation 'com.google.firebase:firebase-analytics'
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
-    implementation("androidx.multidex:multidex:2.0.1")
-    implementation 'androidx.window:window:1.1.0'
-    implementation 'androidx.window:window-java:1.1.0'
 
-    // (Java only)
-    implementation "androidx.work:work-runtime:$work_version"
-    // Kotlin + coroutines
-    implementation "androidx.work:work-runtime-ktx:$work_version"
-}
+    flutter {
+        source '../..'
+    }
+
+    dependencies {
+        def work_version = "2.8.1"
+        constraints {
+            implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0") {
+                because("kotlin-stdlib-jdk7 is now a part of kotlin-stdlib")
+            }
+            implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0") {
+                because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
+            }
+        }
+        implementation platform('com.google.firebase:firebase-bom:32.2.3')
+        implementation "androidx.browser:browser:1.4.0"
+        implementation 'com.google.firebase:firebase-analytics'
+        coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+        implementation("androidx.multidex:multidex:2.0.1")
+        implementation 'androidx.window:window:1.1.0'
+        implementation 'androidx.window:window-java:1.1.0'
+
+        // (Java only)
+        implementation "androidx.work:work-runtime:$work_version"
+        // Kotlin + coroutines
+        implementation "androidx.work:work-runtime-ktx:$work_version"
+    }
 
 

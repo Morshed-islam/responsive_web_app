@@ -12,7 +12,7 @@ class AddDonerController extends ChangeNotifier {
 
   Future<String> addDonor(Doner donor) async {
     try {
-      await firestore.collection(AppConstants.donorCollectionName).add(donor.toMap());
+      await firestore.collection(AppConstants.donorListCollection).add(donor.toMap());
       notifyListeners();
       return errorMessage = "Success";
     } catch (error) {
